@@ -4,8 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch, useSelector } from 'react-redux'
 import { setTaskID, setTasks } from '../redux/actions'
-import GlobalStyle from '../utils/GlobalStyle'
 import CheckBox from '@react-native-community/checkbox'
+import { useTheme } from '@react-navigation/native'
 
 export default function ToDo({ navigation }) {
 
@@ -50,6 +50,8 @@ export default function ToDo({ navigation }) {
         }
     }
 
+    const { colors } = useTheme()
+
     return (
         <View style={styles.body}>
             <FlatList
@@ -57,7 +59,7 @@ export default function ToDo({ navigation }) {
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        style={styles.item}
+                        style={[styles.item, { backgroundColor: colors.card }]}
                         onPress={() => {
                             dispatch(setTaskID(item.ID))
                             navigation.navigate('Task')
@@ -81,16 +83,15 @@ export default function ToDo({ navigation }) {
                             />
                             <View style={styles.item_body}>
                                 <Text style={
-                                    styles.title
+                                    [styles.title, {color: colors.text}]
                                 }
                                     numberOfLines={1}
                                 >
                                     {item.Title}
                                 </Text>
-                                <Text style={[
-                                    GlobalStyle.CustomFontTask,
+                                <Text style={
                                     styles.subtitle
-                                ]}
+                                }
                                     numberOfLines={1}
                                 >
                                     {item.Desc}
@@ -111,7 +112,7 @@ export default function ToDo({ navigation }) {
                 )}
             />
             <TouchableOpacity
-                style={styles.button}
+                style={[styles.button, { backgroundColor: colors.primary }]}
                 onPress={() => {
                     dispatch(setTaskID(tasks.length + 1))
                     navigation.navigate('Task')
@@ -120,7 +121,7 @@ export default function ToDo({ navigation }) {
                 <FontAwesome5
                     name={'plus'}
                     size={20}
-                    color={'#ffffff'}
+                    color={colors.background}
                 />
             </TouchableOpacity>
         </View>
@@ -135,7 +136,6 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 30,
-        backgroundColor: '#6200ee',
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
@@ -160,21 +160,19 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         marginVertical: 7,
         paddingRight: 10,
-        backgroundColor: '#ffffff',
         justifyContent: 'center',
         borderRadius: 10,
         elevation: 5
     },
     title: {
-        color: '#000000',
         fontSize: 30,
         margin: 5,
         fontFamily: 'Ubuntu-Regular'
     },
     subtitle: {
-        color: '#616161',
         fontSize: 20,
-        margin: 5
+        margin: 5,
+        fontFamily: 'SourceSansPro-Regular'
     },
     color: {
         width: 20,

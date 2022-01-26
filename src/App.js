@@ -10,13 +10,34 @@ import { Provider } from 'react-redux';
 import { Store } from './redux/store';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Task from './screens/Task';
-import { StatusBar } from 'react-native';
-import { LogBox } from 'react-native';
+import { StatusBar, LogBox, useColorScheme } from 'react-native';
+import { useTheme } from '@react-navigation/native'
 LogBox.ignoreAllLogs()
 
 const Tab = createBottomTabNavigator()
 
+const LightTheme = {
+  colors: {
+    primary: '#6200ee',
+    card: '#ffffff',
+    text: '#000000',
+    background: 'rgb(242, 242, 242)'
+  }
+}
+
+const DarkTheme = {
+  colors: {
+    primary: '#6161ff',
+    card: '#000000',
+    text: '#ffffff',
+    background: 'rgb(30, 30, 30)'
+  }
+}
+
 function HomeTabs() {
+
+  const { colors } = useTheme()
+
   return (
     <Tab.Navigator
       screenOptions={
@@ -36,8 +57,7 @@ function HomeTabs() {
               />
             )
           },
-          tabBarActiveTintColor: '#3700b3',
-          tabBarInactiveTintColor: '#777777',
+          tabBarActiveTintColor: colors.primary,
           tabBarLabelStyle: { fontSize: 15, fontWeight: 'bold' }
         })
       }
@@ -51,21 +71,24 @@ function HomeTabs() {
 const RootStack = createStackNavigator();
 
 function App() {
+
+  const scheme = useColorScheme()
+
   return (
     <Provider store={Store}>
-      <StatusBar 
-        barStyle = "light-content" 
-        hidden = {false} 
-        backgroundColor = "#3700b3" 
-        translucent = {true}
+      <StatusBar
+        barStyle='light-content'
+        hidden={false}
+        backgroundColor='#280085'
+        translucent={true}
       />
-      <NavigationContainer>
+      <NavigationContainer theme={scheme === 'dark' ? DarkTheme : LightTheme}>
         <RootStack.Navigator
           initialRouteName="Splash"
           screenOptions={{
             headerTitleAlign: 'center',
             headerStyle: {
-              backgroundColor: '#6200ee'
+              backgroundColor: '#3700b3'
             },
             headerTintColor: '#ffffff',
             headerTitleStyle: {

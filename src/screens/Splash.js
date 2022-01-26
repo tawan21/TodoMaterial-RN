@@ -6,7 +6,6 @@ import {
     Text
 } from 'react-native';
 import PushNotification from "react-native-push-notification";
-import GlobalStyle from '../utils/GlobalStyle';
 
 export default function Splash({ navigation }) {
 
@@ -14,7 +13,7 @@ export default function Splash({ navigation }) {
         createChannels();
         setTimeout(() => {
             navigation.replace('My Tasks')
-        }, 2000);
+        }, 1250);
     }, []);
 
     const createChannels = () => {
@@ -32,9 +31,8 @@ export default function Splash({ navigation }) {
                 style={styles.logo}
                 source={require('../../assets/checklist.png')}
             />
-            <Text style={[
-                GlobalStyle.CustomFontBig,
-                styles.text]}>
+            <Text style={
+                styles.text}>
                 To-Do List
             </Text>
         </View>
@@ -46,7 +44,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#6200ee',
+        backgroundColor: '#3700b3',
     },
     logo: {
         height: 150,
@@ -55,6 +53,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 40,
+        fontFamily: 'JosefinSans-Regular',
         color: '#ffffff'
     }
 })

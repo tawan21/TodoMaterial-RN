@@ -8,6 +8,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import PushNotification from 'react-native-push-notification'
 import RNFS from 'react-native-fs'
 import Dialog from 'react-native-dialog'
+import { Appearance } from 'react-native'
+import { useTheme } from '@react-navigation/native'
 
 export default function Task({ navigation }) {
 
@@ -27,6 +29,8 @@ export default function Task({ navigation }) {
             getTask();
         })
     }, [])
+
+    const theme = Appearance.getColorScheme()
 
     const getTask = () => {
         const Task = tasks.find(task => task.ID === taskID)
@@ -102,6 +106,8 @@ export default function Task({ navigation }) {
             .catch(err => console.log(err))
     }
 
+    const { colors } = useTheme()
+
     return (
         <ScrollView>
             <View style={styles.body}>
@@ -131,64 +137,15 @@ export default function Task({ navigation }) {
                         }}
                     />
                 </Dialog.Container>
-                {/* <Modal
-                    visible={bellModal}
-                    transparent
-                    onRequestClose={() => showBellModal(false)}
-                    animationType='slide'
-                    hardwareAccelerated
-                >
-                    <View style={styles.centered_view}>
-                        <View style={styles.bell_modal}>
-                            <View style={styles.bell_body}>
-                                <Text style={styles.text}>
-                                    Remind Me After
-                                </Text>
-                                <TextInput
-                                    style={styles.bell_input}
-                                    keyboardType='numeric'
-                                    value={bellTime}
-                                    onChangeText={value => setBellTime(value)}
-                                />
-                                <Text style={styles.text}>
-                                    Minute(s)
-                                </Text>
-                            </View>
-                            <View style={styles.bell_buttons}>
-                                <TouchableOpacity
-                                    style={styles.bell_CancelBtn}
-                                    onPress={() => {
-                                        showBellModal(false)
-                                    }}
-                                >
-                                    <Text style={styles.text}>
-                                        Cancel
-                                    </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={styles.bell_OkBtn}
-                                    onPress={() => {
-                                        showBellModal(false)
-                                        setTaskAlarm()
-                                    }}
-                                >
-                                    <Text style={styles.text}>
-                                        OK
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </Modal> */}
                 <TextInput
                     value={title}
-                    style={styles.input}
+                    style={[styles.input, { backgroundColor: colors.card }]}
                     placeholder='Title'
                     onChangeText={value => setTitle(value)}
                 />
                 <TextInput
                     value={desc}
-                    style={styles.input}
+                    style={[styles.input, { backgroundColor: colors.card }]}
                     placeholder='Description'
                     multiline
                     onChangeText={value => setDesc(value)}
@@ -249,18 +206,18 @@ export default function Task({ navigation }) {
                 </View>
                 <View style={styles.extra_row}>
                     <TouchableOpacity
-                        style={styles.extra_button}
+                        style={[styles.extra_button, { backgroundColor: colors.primary }]}
                         onPress={() => { showBellModal(true) }}
                     >
                         <FontAwesome5
                             name={'bell'}
                             size={25}
-                            color={'#ffffff'}
+                            color={colors.background}
                             solid
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.extra_button}
+                        style={[styles.extra_button, { backgroundColor: colors.primary }]}
                         onPress={() => {
                             if (tasks.findIndex(task => task.ID === taskID) === -1)
                                 ToastAndroid.show("Save the Task to attach an image", ToastAndroid.LONG)
@@ -271,7 +228,7 @@ export default function Task({ navigation }) {
                         <FontAwesome5
                             name={'camera'}
                             size={25}
-                            color={'#ffffff'}
+                            color={colors.background}
                         />
                     </TouchableOpacity>
                 </View>
@@ -300,8 +257,8 @@ export default function Task({ navigation }) {
                         value={done}
                         onValueChange={newValue => setDone(newValue)}
                     />
-                    <Text style={styles.text}>
-                        completed
+                    <Text style={[styles.text, { color: colors.text }]}>
+                        task complete
                     </Text>
                 </View>
                 <View style={styles.extra_row}>
@@ -314,7 +271,7 @@ export default function Task({ navigation }) {
                         <FontAwesome5
                             name={'save'}
                             size={30}
-                            color={'#000000'}
+                            color={colors.background}
                             solid
                         />
                     </TouchableOpacity>
@@ -338,9 +295,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         borderWidth: 1,
-        borderColor: '#555555',
-        borderRadius: 10,
-        backgroundColor: '#ffffff',
+        borderColor: '#888888',
+        borderRadius: 5,
         textAlign: 'left',
         fontSize: 20,
         margin: 10,
@@ -357,8 +313,7 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     text: {
-        fontSize: 20,
-        color: '#000000'
+        fontSize: 20
     },
     color_bar: {
         flexDirection: 'row',
@@ -408,59 +363,8 @@ const styles = StyleSheet.create({
     extra_button: {
         flex: 1,
         height: 50,
-        backgroundColor: '#6200ee',
         borderRadius: 10,
         marginHorizontal: 5,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    centered_view: {
-        flex: 1,
-        backgroundColor: '#00000099',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    bell_modal: {
-        width: 300,
-        height: 200,
-        backgroundColor: '#ffffff',
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#000000'
-    },
-    bell_body: {
-        height: 150,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    bell_buttons: {
-        flexDirection: 'row',
-        height: 50
-    },
-    bell_input: {
-        width: 50,
-        height: 50,
-        borderWidth: 1,
-        borderColor: '#555555',
-        borderRadius: 10,
-        backgroundColor: '#ffffff',
-        textAlign: 'center',
-        fontSize: 20,
-        margin: 10
-    },
-    bell_CancelBtn: {
-        flex: 1,
-        borderWidth: 1,
-        borderColor: '#000000',
-        borderBottomLeftRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    bell_OkBtn: {
-        flex: 1,
-        borderWidth: 1,
-        borderColor: '#000000',
-        borderBottomRightRadius: 20,
         justifyContent: 'center',
         alignItems: 'center'
     },
